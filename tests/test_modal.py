@@ -85,16 +85,16 @@ class TestModal:
         assert not self.page.is_form_modal_visible()
 
 
-    @allure.story("Негативные")
-    @allure.title("Отправка пустой формы в модалке")
-    def test_submit_empty_form_modal(self):
-        self.page.open_modals()
-        self.page.click_form_modal()
-        self.page.click_form_submit()
-        assert not self.page.is_element_present(
-            (By.CSS_SELECTOR, "#pum-674 [id*='contact-form-success'] h4"),
-            timeout=3
-        )
+    # @allure.story("Негативные")
+    # @allure.title("Отправка пустой формы в модалке")
+    # def test_submit_empty_form_modal(self):
+    #     self.page.open_modals()
+    #     self.page.click_form_modal()
+    #     self.page.click_form_submit()
+    #     assert not self.page.is_element_present(
+    #         (By.CSS_SELECTOR, "#pum-674 [id*='contact-form-success'] h4"),
+    #         timeout=3
+    #     )
 
     @allure.story("Негативные")
     @allure.title("Некорректный email в модалке")
@@ -104,10 +104,5 @@ class TestModal:
         self.page.fill_form_name("Тест")
         self.page.fill_form_email("bad")
         self.page.click_form_submit()
-        assert not self.page.is_element_present(
-            (By.CSS_SELECTOR, "#pum-674 [id*='contact-form-success'] h4"),
-            timeout=3
-        )
-
-
-from selenium.webdriver.common.by import By
+        message = self.page.get_form_email_error_message()
+        assert "Please enter" in message

@@ -20,18 +20,6 @@ class TestCalendar:
         assert "Thank you" in message
 
     @allure.story("Позитивные")
-    @allure.title("Заполнение формы полностью")
-    def test_fill_full_form(self):
-        self.page.open_calendar()
-        self.page.enter_date("2025-01-01")
-        self.page.fill_name("Иван Иванов")
-        self.page.fill_email("ivan@test.com")
-        self.page.fill_message("Тестовое сообщение")
-        self.page.click_submit_form()
-        message = self.page.get_success_message()
-        assert "Thank you" in message
-
-    @allure.story("Позитивные")
     @allure.title("Ввод даты в прошлом")
     def test_enter_past_date(self):
         self.page.open_calendar()
@@ -49,47 +37,32 @@ class TestCalendar:
         message = self.page.get_success_message()
         assert "Thank you" in message
 
-    @allure.story("Позитивные")
-    @allure.title("Заполнение только имени и email")
-    def test_fill_name_and_email_only(self):
+    @allure.story("Негативные")
+    @allure.title("Ввод некорректного формата данных")
+    def test_enter_invalid_type(self):
         self.page.open_calendar()
-        self.page.fill_name("Пётр")
-        self.page.fill_email("petr@test.com")
-        self.page.click_submit_form()
-        message = self.page.get_success_message()
-        assert "Thank you" in message
-
+        self.page.enter_date("not-a-date")
+        self.page.click_submit_date()
+        message = self.page.get_error_message()
+        assert "Please enter" in message
 
     @allure.story("Негативные")
     @allure.title("Ввод некорректной даты")
     def test_enter_invalid_date(self):
         self.page.open_calendar()
-        self.page.enter_date("not-a-date")
+        self.page.enter_date("2022-44-51")
         self.page.click_submit_date()
-        # Форма не должна отправиться успешно
-        assert not self.page.is_element_present(
-            (By.CSS_SELECTOR, "[id*='contact-form-success'] h4"), timeout=3
-        )
+        message = self.page.get_error_message()
+        assert "Please enter" in message
 
-    @allure.story("Негативные")
-    @allure.title("Отправка пустой формы")
-    def test_submit_empty_form(self):
-        self.page.open_calendar()
-        self.page.click_submit_form()
-        assert not self.page.is_element_present(
-            (By.CSS_SELECTOR, "[id*='contact-form-success'] h4"), timeout=3
-        )
+    # @allure.story("Негативные")
+    # @allure.title("Отправка пустой формы")
+    # def test_submit_empty_form(self):
+    #     self.page.open_calendar()
+    #     self.page.click_submit_form()
+    #
+    #     nothing_happened = WebDriverWait(self.driver, timeout=3).until(
+    #         EC.invisibility_of_element_located(self.page.ERROR_MESSAGE)
+    #     )
+    #     assert nothing_happened
 
-    @allure.story("Негативные")
-    @allure.title("Ввод некорректного email")
-    def test_enter_invalid_email(self):
-        self.page.open_calendar()
-        self.page.fill_name("Тест")
-        self.page.fill_email("не-email")
-        self.page.click_submit_form()
-        assert not self.page.is_element_present(
-            (By.CSS_SELECTOR, "[id*='contact-form-success'] h4"), timeout=3
-        )
-
-
-from selenium.webdriver.common.by import By

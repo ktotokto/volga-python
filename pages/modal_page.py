@@ -14,6 +14,8 @@ class ModalPage(BasePage):
     SIMPLE_MODAL_CONTENT = (By.CSS_SELECTOR, "#pum-1318 .pum-content")
     SIMPLE_MODAL_CLOSE = (By.CSS_SELECTOR, "#pum-1318 .pum-close")
 
+    ERROR_EMAIL_MESSAGE = (By.CSS_SELECTOR, "[id*='g1051-email-email-error-message']")
+
     FORM_MODAL_OVERLAY = (By.ID, "pum-674")
     FORM_MODAL_TITLE = (By.ID, "pum_popup_title_674")
     FORM_NAME_INPUT = (By.ID, "g1051-name")
@@ -67,6 +69,9 @@ class ModalPage(BasePage):
 
     def get_form_success_message(self):
         return self.get_text(self.FORM_SUCCESS)
+
+    def get_form_email_error_message(self):
+        return self.get_text(self.ERROR_EMAIL_MESSAGE)
 
     def close_form_modal(self):
         self.click(self.FORM_MODAL_CLOSE)

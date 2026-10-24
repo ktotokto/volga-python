@@ -5,11 +5,12 @@ from webdriver_manager.chrome import ChromeDriverManager
 import allure
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def driver():
     options = webdriver.ChromeOptions()
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.page_load_strategy = 'eager'
 
     service = Service(ChromeDriverManager().install())
     browser = webdriver.Chrome(service=service, options=options)
