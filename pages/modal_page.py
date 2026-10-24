@@ -28,9 +28,7 @@ class ModalPage(BasePage):
 
     def click_simple_modal(self):
         self.click(self.SIMPLE_MODAL_BTN)
-
-    def click_form_modal(self):
-        self.click(self.FORM_MODAL_BTN)
+        self.wait.until(lambda d: d.find_element(*self.SIMPLE_MODAL_OVERLAY).is_displayed())
 
     def is_simple_modal_visible(self):
         return self.is_displayed(self.SIMPLE_MODAL_OVERLAY)
@@ -43,6 +41,11 @@ class ModalPage(BasePage):
 
     def close_simple_modal(self):
         self.click(self.SIMPLE_MODAL_CLOSE)
+        self.wait_for_invisibility(self.SIMPLE_MODAL_OVERLAY)
+
+    def click_form_modal(self):
+        self.click(self.FORM_MODAL_BTN)
+        self.wait.until(lambda d: d.find_element(*self.FORM_MODAL_OVERLAY).is_displayed())
 
     def is_form_modal_visible(self):
         return self.is_displayed(self.FORM_MODAL_OVERLAY)
@@ -67,7 +70,9 @@ class ModalPage(BasePage):
 
     def close_form_modal(self):
         self.click(self.FORM_MODAL_CLOSE)
+        self.wait_for_invisibility(self.FORM_MODAL_OVERLAY)
 
     def close_form_modal_by_escape(self):
         from selenium.webdriver.common.action_chains import ActionChains
         ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
+        self.wait_for_invisibility(self.FORM_MODAL_OVERLAY)

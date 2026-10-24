@@ -1,6 +1,7 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 class BasePage:
@@ -18,15 +19,22 @@ class BasePage:
         return self.wait.until(EC.visibility_of_element_located(locator))
 
     def click(self, locator):
-        self.find(locator).click()
+        element = self.find_visible(locator)
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+        element.click()
 
     def send_keys(self, locator, text):
-        element = self.find(locator)
-        element.clear()
+        element = self.find_visible(locator)
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+        try:
+            element.clear()
+        except Exception:
+            self.driver.execute_script("arguments[0].value = '';", element)
+
         element.send_keys(text)
 
     def get_text(self, locator):
-        return self.find(locator).text
+        return self.find_visible(locator).text
 
     def is_displayed(self, locator):
         try:
@@ -42,3 +50,6 @@ class BasePage:
             return True
         except TimeoutException:
             return False
+
+    def wait_for_invisibility(self, locator, timeout=10):
+        self.wait.until(EC.invisibility_of_element_located(locator))

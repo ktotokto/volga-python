@@ -6,13 +6,13 @@ class CalendarPage(BasePage):
     URL = "https://practice-automation.com/calendars/"
 
     DATE_INPUT = (By.ID, "g1065-1-selectorenteradate")
-    SUBMIT_DATE_BTN = (By.CSS_SELECTOR, ".contact-submit button[type='submit']")
+    SUBMIT_DATE_BTN = (By.CSS_SELECTOR, "#jp-form-d789f525b512b8c992166cfbd9a18204964b4777 button[type='submit']")
     SUCCESS_MESSAGE = (By.CSS_SELECTOR, "[id*='contact-form-success'] h4")
 
     NAME_INPUT = (By.ID, "g1065-name")
     EMAIL_INPUT = (By.ID, "g1065-email")
     MESSAGE_TEXTAREA = (By.ID, "contact-form-comment-g1065-message")
-    SUBMIT_FORM_BTN = (By.CSS_SELECTOR, ".contact-submit button[type='submit']")
+    SUBMIT_FORM_BTN = (By.CSS_SELECTOR, "#jp-form-4ae566e741892db7f82c27b19f133d98dbda317d button[type='submit']")
 
     def open_calendar(self):
         self.open(self.URL)

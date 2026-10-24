@@ -1,4 +1,3 @@
-import time
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
 
@@ -32,9 +31,7 @@ class AdsPage(BasePage):
         self.open(self.URL)
 
     def wait_for_ad(self, timeout=10):
-        self.wait.until(
-            lambda d: d.find_element(*self.AD_OVERLAY).is_displayed()
-        )
+        self.wait.until(lambda d: d.find_element(*self.AD_OVERLAY).is_displayed())
 
     def is_ad_visible(self):
         return self.is_displayed(self.AD_OVERLAY)
@@ -47,9 +44,11 @@ class AdsPage(BasePage):
 
     def close_ad(self):
         self.click(self.AD_CLOSE)
+        self.wait_for_invisibility(self.AD_OVERLAY)
 
     def click_simple_modal(self):
         self.click(self.SIMPLE_MODAL_BTN)
+        self.wait.until(lambda d: d.find_element(*self.SIMPLE_MODAL_OVERLAY).is_displayed())
 
     def is_simple_modal_visible(self):
         return self.is_displayed(self.SIMPLE_MODAL_OVERLAY)
@@ -59,9 +58,11 @@ class AdsPage(BasePage):
 
     def close_simple_modal(self):
         self.click(self.SIMPLE_MODAL_CLOSE)
+        self.wait_for_invisibility(self.SIMPLE_MODAL_OVERLAY)
 
     def click_form_modal(self):
         self.click(self.FORM_MODAL_BTN)
+        self.wait.until(lambda d: d.find_element(*self.FORM_MODAL_OVERLAY).is_displayed())
 
     def is_form_modal_visible(self):
         return self.is_displayed(self.FORM_MODAL_OVERLAY)
@@ -83,3 +84,4 @@ class AdsPage(BasePage):
 
     def close_form_modal(self):
         self.click(self.FORM_MODAL_CLOSE)
+        self.wait_for_invisibility(self.FORM_MODAL_OVERLAY)
