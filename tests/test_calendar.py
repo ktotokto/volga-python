@@ -15,8 +15,8 @@ class TestCalendar:
     def test_enter_valid_date(self):
         with allure.step("Открыть страницу календаря"):
             self.page.open_calendar()
-        with allure.step("Ввести корректную дату 2025-07-15"):
-            self.page.enter_date("2025-07-15")
+        with allure.step("Ввести корректную дату 2025-09-21"):
+            self.page.enter_date("2025-09-21")
         with allure.step("Нажать кнопку Submit"):
             self.page.click_submit_date()
         with allure.step("Проверить появление сообщения об успехе"):
@@ -28,8 +28,8 @@ class TestCalendar:
     def test_enter_past_date(self):
         with allure.step("Открыть страницу календаря"):
             self.page.open_calendar()
-        with allure.step("Ввести дату в прошлом 2020-01-01"):
-            self.page.enter_date("2020-01-01")
+        with allure.step("Ввести дату в прошлом 2018-02-12"):
+            self.page.enter_date("2018-02-12")
         with allure.step("Нажать кнопку Submit"):
             self.page.click_submit_date()
         with allure.step("Проверить появление сообщения об успехе"):
@@ -41,8 +41,8 @@ class TestCalendar:
     def test_enter_future_date(self):
         with allure.step("Открыть страницу календаря"):
             self.page.open_calendar()
-        with allure.step("Ввести дату в будущем 2030-12-31"):
-            self.page.enter_date("2030-12-31")
+        with allure.step("Ввести дату в будущем 2029-10-11"):
+            self.page.enter_date("2029-10-11")
         with allure.step("Нажать кнопку Submit"):
             self.page.click_submit_date()
         with allure.step("Проверить появление сообщения об успехе"):
@@ -67,8 +67,8 @@ class TestCalendar:
     def test_enter_end_of_year_date(self):
         with allure.step("Открыть страницу календаря"):
             self.page.open_calendar()
-        with allure.step("Ввести дату на границе года 2025-12-31"):
-            self.page.enter_date("2025-12-31")
+        with allure.step("Ввести дату на границе года 2021-12-31"):
+            self.page.enter_date("2021-12-31")
         with allure.step("Нажать кнопку Submit"):
             self.page.click_submit_date()
         with allure.step("Проверить появление сообщения об успехе"):
@@ -105,8 +105,8 @@ class TestCalendar:
     def test_enter_invalid_date(self):
         with allure.step("Открыть страницу календаря"):
             self.page.open_calendar()
-        with allure.step("Ввести несуществующую дату 2022-44-51"):
-            self.page.enter_date("2022-44-51")
+        with allure.step("Ввести несуществующую дату 2042-44-51"):
+            self.page.enter_date("2042-44-51")
         with allure.step("Нажать кнопку Submit"):
             self.page.click_submit_date()
         with allure.step("Проверить появление сообщения об ошибке"):

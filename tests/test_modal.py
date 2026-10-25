@@ -70,7 +70,7 @@ class TestModal:
             assert "Form" in title
 
     @allure.story("Form Modal")
-    @allure.title("Заполнение поля Message")
+    @allure.title("Заполнение и отправка формы")
     @allure.description(
         "Получает список инструментов на главной странице, преобразует в текст через запятую и заполняет поле Message")
     @allure.severity(allure.severity_level.CRITICAL)
@@ -87,9 +87,9 @@ class TestModal:
         with allure.step("Нажать кнопку Form Modal"):
             self.page.click_form_modal()
         with allure.step("Заполнить поле Name"):
-            self.page.fill_form_name("Тестировщик")
+            self.page.fill_form_name("Гриша")
         with allure.step("Заполнить поле Email"):
-            self.page.fill_form_email("test@simbirsoft.ru")
+            self.page.fill_form_email("mail@mail.com")
         with allure.step("Заполнить поле Message текстом из Start learning"):
             self.page.fill_form_message(tools_text)
         with allure.step("Нажать кнопку Submit"):
@@ -130,9 +130,9 @@ class TestModal:
         with allure.step("Нажать кнопку Form Modal"):
             self.page.click_form_modal()
         with allure.step("Заполнить поле Name"):
-            self.page.fill_form_name("Тест")
+            self.page.fill_form_name("Боб")
         with allure.step("Ввести некорректный email"):
-            self.page.fill_form_email("bad")
+            self.page.fill_form_email("непочта")
         with allure.step("Нажать кнопку Submit"):
             self.page.click_form_submit()
         with allure.step("Проверить появление сообщения об ошибке email"):
@@ -165,7 +165,7 @@ class TestModal:
         with allure.step("Нажать кнопку Form Modal"):
             self.page.click_form_modal()
         with allure.step("Заполнить только поле Email"):
-            self.page.fill_form_email("test@test.com")
+            self.page.fill_form_email("mail@mail.com")
         with allure.step("Нажать кнопку Submit"):
             self.page.click_form_submit()
         with allure.step("Получить текст общей ошибки формы"):
