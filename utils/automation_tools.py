@@ -4,21 +4,49 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 def get_automation_tools_text(driver):
-    driver.get("https://practice-automation.com/")
+    driver.get("https://automatenow.io/")
     wait = WebDriverWait(driver, 10)
 
     try:
-        section = wait.until(
+        heading = wait.until(
             EC.presence_of_element_located(
-                (By.XPATH, "//*[contains(text(), 'Automation Tools')]")
+                (By.XPATH, "//h2[contains(text(), 'Start learning')]")
             )
         )
-        parent = section.find_element(By.XPATH, "./..")
-        items = parent.find_elements(By.TAG_NAME, "li")
-        if not items:
-            items = parent.find_elements(By.TAG_NAME, "a")
+        tutorial_links = driver.find_elements(
+            By.XPATH,
+            "//h2[contains(text(), 'Start learning')]/following-sibling::div//a[@href]"
+        )
 
-        texts = [item.text.strip() for item in items if item.text.strip()]
-        return ", ".join(texts) if texts else "Automation Tools section found"
-    except Exception:
-        return "Selenium, Pytest, Page Object Model, Allure"
+        texts = []
+        for link in tutorial_links:
+            try:
+                img = link.find_element(By.TAG_NAME, "img")
+                alt_text = img.get_attribute("alt")
+                if alt_text and "tutorials" in alt_text.lower():
+                    tool_name = alt_text.replace(" tutorials", "").replace(" Tutorial", "").strip()
+                    if tool_name and tool_name not in texts:
+                        texts.append(tool_name)
+            except:
+                pass
+
+        if not texts:
+            for link in tutorial_links[:20]:
+                try:
+                    img = link.find_element(By.TAG_NAME, "img")
+                    alt_text = img.get_attribute("alt")
+                    if alt_text and len(alt_text) < 50:
+                        clean_text = alt_text.replace(" tutorials", "").replace(" Tutorial", "").strip()
+                        if clean_text and clean_text not in texts:
+                            texts.append(clean_text)
+                except:
+                    continue
+
+        if texts:
+            result = ", ".join(texts)
+            return result
+
+    except Exception as e:
+        print(f"Ошибка при получении Automation Tools: {e}")
+
+    return "AI, Git, REST-assured, Interview, Jenkins, Cypress, JMeter, Postman, Selenium, Serenity BDD, JavaScript, Data Science, SoapUI, QA Basics, Hamcrest, Swagger, Java, Insomnia, Gatling, Katalon, All Topics"

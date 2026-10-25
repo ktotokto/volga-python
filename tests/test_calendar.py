@@ -13,55 +13,102 @@ class TestCalendar:
     @allure.story("Позитивные")
     @allure.title("Ввод корректной даты")
     def test_enter_valid_date(self):
-        self.page.open_calendar()
-        self.page.enter_date("2025-07-15")
-        self.page.click_submit_date()
-        message = self.page.get_success_message()
-        assert "Thank you" in message
+        with allure.step("Открыть страницу календаря"):
+            self.page.open_calendar()
+        with allure.step("Ввести корректную дату 2025-07-15"):
+            self.page.enter_date("2025-07-15")
+        with allure.step("Нажать кнопку Submit"):
+            self.page.click_submit_date()
+        with allure.step("Проверить появление сообщения об успехе"):
+            message = self.page.get_success_message()
+            assert "Thank you" in message
 
     @allure.story("Позитивные")
     @allure.title("Ввод даты в прошлом")
     def test_enter_past_date(self):
-        self.page.open_calendar()
-        self.page.enter_date("2020-01-01")
-        self.page.click_submit_date()
-        message = self.page.get_success_message()
-        assert "Thank you" in message
+        with allure.step("Открыть страницу календаря"):
+            self.page.open_calendar()
+        with allure.step("Ввести дату в прошлом 2020-01-01"):
+            self.page.enter_date("2020-01-01")
+        with allure.step("Нажать кнопку Submit"):
+            self.page.click_submit_date()
+        with allure.step("Проверить появление сообщения об успехе"):
+            message = self.page.get_success_message()
+            assert "Thank you" in message
 
     @allure.story("Позитивные")
     @allure.title("Ввод даты в будущем")
     def test_enter_future_date(self):
-        self.page.open_calendar()
-        self.page.enter_date("2030-12-31")
-        self.page.click_submit_date()
-        message = self.page.get_success_message()
-        assert "Thank you" in message
+        with allure.step("Открыть страницу календаря"):
+            self.page.open_calendar()
+        with allure.step("Ввести дату в будущем 2030-12-31"):
+            self.page.enter_date("2030-12-31")
+        with allure.step("Нажать кнопку Submit"):
+            self.page.click_submit_date()
+        with allure.step("Проверить появление сообщения об успехе"):
+            message = self.page.get_success_message()
+            assert "Thank you" in message
 
-    @allure.story("Негативные")
-    @allure.title("Ввод некорректного формата данных")
-    def test_enter_invalid_type(self):
-        self.page.open_calendar()
-        self.page.enter_date("not-a-date")
-        self.page.click_submit_date()
-        message = self.page.get_error_message()
-        assert "Please enter" in message
+    @allure.story("Позитивные")
+    @allure.title("Ввод даты високосного года")
+    def test_enter_leap_year_date(self):
+        with allure.step("Открыть страницу календаря"):
+            self.page.open_calendar()
+        with allure.step("Ввести корректную дату високосного года 2024-02-29"):
+            self.page.enter_date("2024-02-29")
+        with allure.step("Нажать кнопку Submit"):
+            self.page.click_submit_date()
+        with allure.step("Проверить появление сообщения об успехе"):
+            message = self.page.get_success_message()
+            assert "Thank you" in message
 
-    @allure.story("Негативные")
-    @allure.title("Ввод некорректной даты")
-    def test_enter_invalid_date(self):
-        self.page.open_calendar()
-        self.page.enter_date("2022-44-51")
-        self.page.click_submit_date()
-        message = self.page.get_error_message()
-        assert "Please enter" in message
+    @allure.story("Позитивные")
+    @allure.title("Ввод даты на границе года")
+    def test_enter_end_of_year_date(self):
+        with allure.step("Открыть страницу календаря"):
+            self.page.open_calendar()
+        with allure.step("Ввести дату на границе года 2025-12-31"):
+            self.page.enter_date("2025-12-31")
+        with allure.step("Нажать кнопку Submit"):
+            self.page.click_submit_date()
+        with allure.step("Проверить появление сообщения об успехе"):
+            message = self.page.get_success_message()
+            assert "Thank you" in message
 
     @allure.story("Негативные")
     @allure.title("Отправка пустой формы календаря")
     def test_submit_empty_calendar(self):
-        self.page.open_calendar()
-        self.page.click_submit_date()
-        assert not self.page.is_date_success_visible(timeout=3), \
-            "Пустая форма не должна была отправиться успешно"
+        with allure.step("Открыть страницу календаря"):
+            self.page.open_calendar()
+        with allure.step("Нажать кнопку Submit без ввода даты"):
+            self.page.click_submit_date()
+        with allure.step("Проверить, что сообщение об успехе НЕ появилось"):
+            assert not self.page.is_date_success_visible(timeout=3)
+        with allure.step("Проверить, что поле даты всё ещё на месте"):
+            assert self.page.is_date_field_present(timeout=3)
 
-        assert self.page.is_date_field_present(timeout=3), \
-            "Поле даты должно оставаться видимым"
+    @allure.story("Негативные")
+    @allure.title("Ввод некорректного формата данных")
+    def test_enter_invalid_type(self):
+        with allure.step("Открыть страницу календаря"):
+            self.page.open_calendar()
+        with allure.step("Ввести некорректный текст not-a-date"):
+            self.page.enter_date("not-a-date")
+        with allure.step("Нажать кнопку Submit"):
+            self.page.click_submit_date()
+        with allure.step("Проверить появление сообщения об ошибке"):
+            message = self.page.get_error_message()
+            assert "Please enter" in message
+
+    @allure.story("Негативные")
+    @allure.title("Ввод некорректной даты")
+    def test_enter_invalid_date(self):
+        with allure.step("Открыть страницу календаря"):
+            self.page.open_calendar()
+        with allure.step("Ввести несуществующую дату 2022-44-51"):
+            self.page.enter_date("2022-44-51")
+        with allure.step("Нажать кнопку Submit"):
+            self.page.click_submit_date()
+        with allure.step("Проверить появление сообщения об ошибке"):
+            message = self.page.get_error_message()
+            assert "Please enter" in message
