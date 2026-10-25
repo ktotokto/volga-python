@@ -18,20 +18,13 @@ class TestModal:
         assert self.page.is_simple_modal_visible()
 
     @allure.story("Simple Modal")
-    @allure.title("Проверка заголовка простой модалки")
-    def test_simple_modal_title(self):
-        self.page.open_modals()
-        self.page.click_simple_modal()
-        title = self.page.get_simple_modal_title()
-        assert title == "Simple Modal"
-
-    @allure.story("Simple Modal")
     @allure.title("Проверка содержимого простой модалки")
     def test_simple_modal_content(self):
         self.page.open_modals()
         self.page.click_simple_modal()
         content = self.page.get_simple_modal_content()
-        assert "simple modal" in content.lower()
+        title = self.page.get_simple_modal_title()
+        assert "simple modal" in content.lower() and title == "Simple Modal"
 
     @allure.story("Simple Modal")
     @allure.title("Закрытие простой модалки")
@@ -84,18 +77,6 @@ class TestModal:
         self.page.close_form_modal_by_escape()
         assert not self.page.is_form_modal_visible()
 
-
-    # @allure.story("Негативные")
-    # @allure.title("Отправка пустой формы в модалке")
-    # def test_submit_empty_form_modal(self):
-    #     self.page.open_modals()
-    #     self.page.click_form_modal()
-    #     self.page.click_form_submit()
-    #     assert not self.page.is_element_present(
-    #         (By.CSS_SELECTOR, "#pum-674 [id*='contact-form-success'] h4"),
-    #         timeout=3
-    #     )
-
     @allure.story("Негативные")
     @allure.title("Некорректный email в модалке")
     def test_invalid_email_in_modal(self):
@@ -106,3 +87,27 @@ class TestModal:
         self.page.click_form_submit()
         message = self.page.get_form_email_error_message()
         assert "Please enter" in message
+
+    @allure.story("Негативные")
+    @allure.title("Отправка пустой формы в модалке")
+    def test_submit_empty_form_modal(self):
+        self.page.open_modals()
+        self.page.click_form_modal()
+        self.page.click_form_submit()
+        error_message = self.page.get_text(self.page.FORM_ERROR_MESSAGE)
+        assert "Please fill out the form correctly" in error_message
+        assert self.page.is_element_present(self.page.FORM_ERROR_LIST, timeout=3)
+        assert self.page.is_form_modal_visible()
+
+    @allure.story("Негативные")
+    @allure.title("Отправка формы с пустым полем Name")
+    def test_submit_form_with_empty_name(self):
+        self.page.open_modals()
+        self.page.click_form_modal()
+        self.page.fill_form_email("test@test.com")
+        self.page.click_form_submit()
+        error_message = self.page.get_text(self.page.FORM_ERROR_MESSAGE)
+        assert "Please fill out the form correctly" in error_message
+        error_list = self.page.get_form_errors()
+        assert any("Name" in error and "required" in error for error in error_list)
+        assert self.page.is_form_modal_visible()

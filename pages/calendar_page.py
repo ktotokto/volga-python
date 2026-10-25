@@ -11,11 +11,8 @@ class CalendarPage(BasePage):
     SUBMIT_DATE_BTN = (By.CSS_SELECTOR, "#jp-form-d789f525b512b8c992166cfbd9a18204964b4777 button[type='submit']")
     SUCCESS_MESSAGE = (By.CSS_SELECTOR, "[id*='contact-form-success'] h4")
     ERROR_MESSAGE = (By.CSS_SELECTOR, ".contact-form__input-error.has-errors span:last-child")
-
-    NAME_INPUT = (By.ID, "g1065-name")
-    EMAIL_INPUT = (By.ID, "g1065-email")
-    MESSAGE_TEXTAREA = (By.ID, "contact-form-comment-g1065-message")
-    SUBMIT_FORM_BTN = (By.CSS_SELECTOR, "#jp-form-4ae566e741892db7f82c27b19f133d98dbda317d button[type='submit']")
+    DATE_SUCCESS = (By.CSS_SELECTOR, "#contact-form-success-d789f525b512b8c992166cfbd9a18204964b4777 h4")
+    DATE_SUBMIT_BTN = (By.CSS_SELECTOR, "#jp-form-d789f525b512b8c992166cfbd9a18204964b4777 button[type='submit']")
 
 
     def open_calendar(self):
@@ -27,6 +24,19 @@ class CalendarPage(BasePage):
     def click_submit_date(self):
         self.click(self.SUBMIT_DATE_BTN)
 
+    def is_date_success_visible(self, timeout=3):
+        try:
+            from selenium.webdriver.support import expected_conditions as EC
+            WebDriverWait(self.driver, timeout).until(
+                EC.visibility_of_element_located(self.DATE_SUCCESS)
+            )
+            return True
+        except:
+            return False
+
+    def is_date_field_present(self, timeout):
+        return self.is_element_present(self.DATE_INPUT, timeout=timeout)
+
     def get_success_message(self):
         WebDriverWait(self.driver, timeout=5).until(
             EC.visibility_of_element_located(self.SUCCESS_MESSAGE))
@@ -36,6 +46,3 @@ class CalendarPage(BasePage):
         WebDriverWait(self.driver, timeout=5).until(
             EC.visibility_of_element_located(self.ERROR_MESSAGE))
         return self.get_text(self.ERROR_MESSAGE)
-
-    def click_submit_form(self):
-        self.click(self.SUBMIT_FORM_BTN)

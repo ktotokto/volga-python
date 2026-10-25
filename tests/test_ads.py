@@ -18,20 +18,13 @@ class TestAds:
         assert self.page.is_ad_visible()
 
     @allure.story("Рекламная модалка")
-    @allure.title("Проверка заголовка рекламы")
+    @allure.title("Проверка содержимого рекламы")
     def test_ad_title(self):
         self.page.open_ads()
         self.page.wait_for_ad()
         title = self.page.get_ad_title()
-        assert title == "Hi"
-
-    @allure.story("Рекламная модалка")
-    @allure.title("Проверка содержимого рекламы")
-    def test_ad_content(self):
-        self.page.open_ads()
-        self.page.wait_for_ad()
         content = self.page.get_ad_content()
-        assert "ad" in content.lower()
+        assert title == "Hi" and "ad" in content.lower()
 
     @allure.story("Рекламная модалка")
     @allure.title("Закрытие рекламной модалки")

@@ -24,6 +24,9 @@ class ModalPage(BasePage):
     FORM_SUBMIT_BTN = (By.CSS_SELECTOR, "#pum-674 .pushbutton-wide")
     FORM_MODAL_CLOSE = (By.CSS_SELECTOR, "#pum-674 .pum-close")
     FORM_SUCCESS = (By.CSS_SELECTOR, "#pum-674 [id*='contact-form-success'] h4")
+    FORM_ERROR_MESSAGE = (By.CSS_SELECTOR, "div.contact-form__error[data-wp-class--show-errors='state.showFormErrors'] .contact-form__error-message")
+    FORM_ERROR_LIST = (By.CSS_SELECTOR, "ul[aria-label='Form errors']")
+    FORM_ERROR_ITEMS = (By.CSS_SELECTOR, "ul[aria-label='Form errors'] li a")
 
     def open_modals(self):
         self.open(self.URL)
@@ -81,3 +84,7 @@ class ModalPage(BasePage):
         from selenium.webdriver.common.action_chains import ActionChains
         ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
         self.wait_for_invisibility(self.FORM_MODAL_OVERLAY)
+
+    def get_form_errors(self):
+        errors = self.driver.find_elements(*self.FORM_ERROR_ITEMS)
+        return [error.text for error in errors]

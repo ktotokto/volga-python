@@ -55,14 +55,13 @@ class TestCalendar:
         message = self.page.get_error_message()
         assert "Please enter" in message
 
-    # @allure.story("Негативные")
-    # @allure.title("Отправка пустой формы")
-    # def test_submit_empty_form(self):
-    #     self.page.open_calendar()
-    #     self.page.click_submit_form()
-    #
-    #     nothing_happened = WebDriverWait(self.driver, timeout=3).until(
-    #         EC.invisibility_of_element_located(self.page.ERROR_MESSAGE)
-    #     )
-    #     assert nothing_happened
+    @allure.story("Негативные")
+    @allure.title("Отправка пустой формы календаря")
+    def test_submit_empty_calendar(self):
+        self.page.open_calendar()
+        self.page.click_submit_date()
+        assert not self.page.is_date_success_visible(timeout=3), \
+            "Пустая форма не должна была отправиться успешно"
 
+        assert self.page.is_date_field_present(timeout=3), \
+            "Поле даты должно оставаться видимым"
